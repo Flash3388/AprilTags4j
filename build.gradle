@@ -1,0 +1,29 @@
+plugins {
+  id "io.github.tomtzook.gradle-cmake" version "1.0.0"
+  id "java-library"
+}
+
+repositories {
+  mavenCentral()
+}
+
+dependencies {
+
+
+}
+
+
+def compileMachineTargets = [machines.host]
+compileMachineTargets.addAll(machines.customMachines)
+
+cmake {
+    targets {
+        apriltags_jni {
+            cmakeLists.set(file('src/main/jni/CMakeLists.txt'))
+            targetMachines.addAll(compileMachineTargets)
+        }
+    }
+}
+
+tasks.clean.dependsOn tasks.cmakeClean
+tasks.build.dependsOn tasks.cmakeBuild
