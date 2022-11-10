@@ -1,20 +1,21 @@
-
 cmake_minimum_required(VERSION 3.16)
-project(apriltags_native C)
+project(apriltags_native CXX)
 
-set(CMAKE_C_STANDARD 11)
+set(CMAKE_CXX_STANDARD 17)
+
+add_subdirectory(jnikit)
 
 find_package(JNI REQUIRED)
+find_package(OpenCV REQUIRED)
 
 find_package(PkgConfig)
 pkg_search_module(apriltag REQUIRED apriltag)
 set(apriltag_INCLUDE_DIRS "${apriltag_INCLUDE_DIRS}/apriltag")
+
+include_directories(${JNI_INCLUDE_DIRS} ${apriltag_INCLUDE_DIRS} ${OpenCV_INCLUDE_DIRS})
 link_directories(${apriltag_LIBDIR})
 
-
-include_directories(${JNI_INCLUDE_DIRS} ${apriltag_INCLUDE_DIRS})
-
 add_library(apriltags_jni SHARED
-        apriltags.c
-        apriltagsFamilies.c)
-target_link_libraries(apriltags_jni ${apriltag_LIBRARIES})
+        apriltag_detector.cpp
+        apriltag_family.cpp)
+target_link_libraries(apriltags_jni ${apriltag_LIBRARIES} ${OpenCV_LIBS} jnikit)
