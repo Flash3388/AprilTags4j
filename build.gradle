@@ -29,6 +29,10 @@ jar {
     }
 }
 
+if (project.hasProperty('crosscompile')) {
+    apply from: project.file('crosscompile.gradle')
+}
+
 def compileMachineTargets = [machines.host]
 compileMachineTargets.addAll(machines.customMachines)
 
