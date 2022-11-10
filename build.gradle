@@ -46,6 +46,6 @@ cmake {
 }
 
 tasks.clean.dependsOn tasks.cmakeClean
-tasks.build.dependsOn tasks.cmakeBuild
+tasks.jar.dependsOn tasks.cmakeBuild
 
 apply from: project.file('publish.gradle')
