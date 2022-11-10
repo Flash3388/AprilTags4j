@@ -8,6 +8,8 @@ extern "C" {
 #include <apriltag.h>
 }
 
+#include "except.h"
+
 
 DEFINE_OBJECT_TYPE(JDetection, "com/flash3388/apriltags4j/Detection")
 
@@ -17,7 +19,7 @@ JNIEXPORT jlong JNICALL Java_com_flash3388_apriltags4j_AprilTagsDetectorJNI_crea
     return jnikit::context<jlong>(env, [](jnikit::Env& env)->jlong {
         apriltag_detector* detector = apriltag_detector_create();
         if (nullptr == detector || errno != 0) {
-            // TODO: HANDLE ERROR
+            env.throwException<JNIException, jnikit::types::Int>(errno);
         }
 
         return reinterpret_cast<jlong>(detector);
@@ -42,7 +44,7 @@ JNIEXPORT void JNICALL Java_com_flash3388_apriltags4j_AprilTagsDetectorJNI_addFa
 
         apriltag_detector_add_family(detector, family);
         if (errno != 0) {
-            // TODO: HANDLE ERROR
+            env.throwException<JNIException, jnikit::types::Int>(errno);
         }
     });
 }
@@ -62,7 +64,7 @@ JNIEXPORT jlong JNICALL Java_com_flash3388_apriltags4j_AprilTagsDetectorJNI_dete
         };
         auto detections = apriltag_detector_detect(detector, &img);
         if (nullptr == detections || errno != 0) {
-            // TODO: HANDLE ERROR
+            env.throwException<JNIException, jnikit::types::Int>(errno);
         }
 
         return reinterpret_cast<jlong>(detections);
@@ -86,7 +88,7 @@ JNIEXPORT jobject JNICALL Java_com_flash3388_apriltags4j_AprilTagsDetectorJNI_de
         auto detections = reinterpret_cast<zarray*>(ptr);
         auto size = zarray_size(detections);
         if (index < 0 || index > size) {
-            // TODO: HANDLE ERROR
+            env.throwException<JNIException, jnikit::types::Int>(errno);
         }
 
         apriltag_detection_t* detection;

@@ -17,6 +17,8 @@ extern "C" {
 #include <apriltag/tagStandard52h13.h>
 }
 
+#include "except.h"
+
 
 enum class FamilyType {
     TAG36H11 = 0,
@@ -80,7 +82,7 @@ JNIEXPORT jlong JNICALL Java_com_flash3388_apriltags4j_AprilTagsFamilyJNI_create
         }
 
         if (nullptr == family || errno != 0) {
-            // TODO: HANDLE ERROR
+            env.throwException<JNIException, jnikit::types::Int>(errno);
         }
 
         return reinterpret_cast<jlong>(family);
