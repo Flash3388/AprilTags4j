@@ -1,6 +1,6 @@
 [submodule "cmake-toolchain-files"]
 	path = cmake-toolchain-files
-	url = git@github.com:tomtzook/cmake-toolchain-files.git
+	url = https://github.com/tomtzook/cmake-toolchain-files.git
 [submodule "src/main/jni/jnikit"]
 	path = src/main/jni/jnikit
-	url = git@github.com:tomtzook/jnikit.git
+	url = https://github.com/tomtzook/jnikit.git
