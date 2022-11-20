@@ -1,6 +1,6 @@
 
 machines.customMachines.register("windows-x86_x64") {
-    it.toolchainFile.set(rootProject.file('cmake-toolchain-files/x86_64-mingw-gcc.cmake'))
+    it.toolchainFile.set(rootProject.file('cmake-toolchain-files/x86_64-mingw-gcc-pthread.cmake'))
 }
 machines.customMachines.register("linux-gnueabihf-arm") {
     it.toolchainFile.set(rootProject.file('cmake-toolchain-files/arm-linux-gnueabihf-gcc.cmake'))

@@ -5,7 +5,6 @@ set(CMAKE_CXX_STANDARD 17)
 
 add_subdirectory(jnikit)
 
-find_package(JNI REQUIRED)
 find_package(OpenCV REQUIRED)
 
 find_package(PkgConfig)
