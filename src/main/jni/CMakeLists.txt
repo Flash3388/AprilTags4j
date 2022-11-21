@@ -16,5 +16,5 @@ link_directories(${apriltag_LIBDIR})
 
 add_library(apriltags_jni SHARED
         apriltag_detector.cpp
-        apriltag_family.cpp except.h)
+        apriltag_family.cpp except.h apriltag_detections.cpp)
 target_link_libraries(apriltags_jni ${apriltag_LIBRARIES} ${OpenCV_LIBS} jnikit)

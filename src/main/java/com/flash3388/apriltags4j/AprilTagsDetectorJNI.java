@@ -8,8 +8,4 @@ public class AprilTagsDetectorJNI {
     public static native void removeFamily(long ptr, long familyPtr);
     public static native void clearFamilies(long ptr);
     public static native long detect(long ptr, long matPtr);
-
-    public static native int detectionsSize(long ptr);
-    public static native Detection detectionsGet(long ptr, int index);
-    public static native void detectionsDestroy(long ptr);
 }

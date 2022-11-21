@@ -12,7 +12,7 @@ public class Detections implements AutoCloseable, Iterator<Detection> {
     Detections(long ptr) {
         this.ptr = ptr;
         this.index = -1;
-        this.size = AprilTagsDetectorJNI.detectionsSize(ptr);
+        this.size = AprilTagsDetectionsJNI.size(ptr);
     }
 
     @Override
@@ -27,11 +27,11 @@ public class Detections implements AutoCloseable, Iterator<Detection> {
             throw new NoSuchElementException();
         }
 
-        return AprilTagsDetectorJNI.detectionsGet(ptr, index);
+        return AprilTagsDetectionsJNI.get(ptr, index);
     }
 
     @Override
     public void close() throws Exception {
-        AprilTagsDetectorJNI.detectionsDestroy(ptr);
+        AprilTagsDetectionsJNI.destroy(ptr);
     }
 }
