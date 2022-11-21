@@ -18,7 +18,7 @@ JNIEXPORT jlong JNICALL Java_com_flash3388_apriltags4j_AprilTagsDetectorJNI_crea
         (JNIEnv *env, jclass obj) {
     return jnikit::context<jlong>(env, [](jnikit::Env& env)->jlong {
         apriltag_detector* detector = apriltag_detector_create();
-        if (nullptr == detector || errno != 0) {
+        if (nullptr == detector ) {
             env.throwException<JNIException, jnikit::types::Int>(errno);
         }
 

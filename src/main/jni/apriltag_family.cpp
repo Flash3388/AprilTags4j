@@ -81,7 +81,7 @@ JNIEXPORT jlong JNICALL Java_com_flash3388_apriltags4j_AprilTagsFamilyJNI_create
                 break;
         }
 
-        if (nullptr == family || errno != 0) {
+        if (nullptr == family) {
             env.throwException<JNIException, jnikit::types::Int>(errno);
         }
 
