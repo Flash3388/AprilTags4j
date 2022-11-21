@@ -10,6 +10,14 @@ public class Detector implements AutoCloseable {
         this.ptr = AprilTagsDetectorJNI.createDetector();
     }
 
+    public DetectorConfiguration getConfiguration() {
+        return AprilTagsDetectorJNI.getConfiguration(ptr);
+    }
+
+    public void setConfiguration(DetectorConfiguration configuration) {
+        AprilTagsDetectorJNI.setConfiguration(ptr, configuration);
+    }
+
     public void addFamily(Family family) {
         AprilTagsDetectorJNI.addFamily(ptr, family.nativePtr());
     }
