@@ -50,6 +50,33 @@ JNIEXPORT void JNICALL Java_com_flash3388_apriltags4j_AprilTagsDetectorJNI_addFa
 }
 
 extern "C"
+JNIEXPORT void JNICALL Java_com_flash3388_apriltags4j_AprilTagsDetectorJNI_removeFamily
+        (JNIEnv *env, jclass obj, jlong ptr, jlong familyPtr) {
+    jnikit::context<void>(env, [ptr, familyPtr](jnikit::Env& env)->void {
+        auto detector = reinterpret_cast<apriltag_detector*>(ptr);
+        auto family = reinterpret_cast<apriltag_family*>(familyPtr);
+
+        apriltag_detector_remove_family(detector, family);
+        if (errno != 0) {
+            env.throwException<JNIException, jnikit::types::Int>(errno);
+        }
+    });
+}
+
+extern "C"
+JNIEXPORT void JNICALL Java_com_flash3388_apriltags4j_AprilTagsDetectorJNI_clearFamilies
+        (JNIEnv *env, jclass obj, jlong ptr) {
+    jnikit::context<void>(env, [ptr](jnikit::Env& env)->void {
+        auto detector = reinterpret_cast<apriltag_detector*>(ptr);
+
+        apriltag_detector_clear_families(detector);
+        if (errno != 0) {
+            env.throwException<JNIException, jnikit::types::Int>(errno);
+        }
+    });
+}
+
+extern "C"
 JNIEXPORT jlong JNICALL Java_com_flash3388_apriltags4j_AprilTagsDetectorJNI_detect
         (JNIEnv *env, jclass obj, jlong ptr, jlong matPtr) {
     return jnikit::context<jlong>(env, [ptr, matPtr](jnikit::Env& env)->jlong {
