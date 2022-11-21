@@ -4,12 +4,28 @@
 
 extern "C" {
 #include <apriltag.h>
+#include <apriltag_pose.h>
 }
 
 #include "except.h"
 
 
 DEFINE_OBJECT_TYPE(JDetection, "com/flash3388/apriltags4j/Detection")
+DEFINE_OBJECT_TYPE(JDetectionInfo, "com/flash3388/apriltags4j/DetectionInfo")
+DEFINE_OBJECT_TYPE(JTagPose, "com/flash3388/apriltags4j/TagPose")
+DEFINE_OBJECT_TYPE(JFlatMatrix, "com/flash3388/apriltags4j/FlatMatrix")
+
+
+static jobject nativeMatToJava(jnikit::Env& env, matd_t* mat) {
+    using namespace jnikit::types;
+    static_assert(sizeof(double) == sizeof(jdouble));
+
+    jsize length = mat->nrows * mat->ncols;
+    auto arr = env.newArray<DoubleArray>(length);
+    arr.fill(mat->data, length);
+
+    return env.getClass<JFlatMatrix>().newInstance<DoubleArray, Int, Int>(arr.array(), mat->nrows, mat->ncols);
+}
 
 extern "C"
 JNIEXPORT jint JNICALL Java_com_flash3388_apriltags4j_AprilTagsDetectionsJNI_size
@@ -36,7 +52,8 @@ JNIEXPORT jobject JNICALL Java_com_flash3388_apriltags4j_AprilTagsDetectionsJNI_
 
         auto detectionCls = env.getClass<JDetection>();
         using namespace jnikit::types;
-        return detectionCls.newInstance<Int, Int, Float, Double, Double>(
+        return detectionCls.newInstance<Long, Int, Int, Float, Double, Double>(
+                reinterpret_cast<long>(detection),
                 detection->id,
                 detection->hamming,
                 detection->decision_margin,
@@ -55,3 +72,31 @@ JNIEXPORT void JNICALL Java_com_flash3388_apriltags4j_AprilTagsDetectionsJNI_des
     });
 }
 
+extern "C"
+JNIEXPORT jobject JNICALL Java_com_flash3388_apriltags4j_AprilTagsDetectionsJNI_estimatePose
+        (JNIEnv* env, jclass obj, jlong detectionPtr, jobject detectionInfoRaw) {
+    return jnikit::context<jobject>(env, [detectionPtr, detectionInfoRaw](jnikit::Env& env) -> jobject {
+        auto detection = reinterpret_cast<apriltag_detection_t*>(detectionPtr);
+        auto detectionInfo = env.wrap<JDetectionInfo>(detectionInfoRaw);
+
+        using namespace jnikit::types;
+
+        apriltag_detection_info_t info {
+            .det = detection,
+            .tagsize = detectionInfo.getField<Double>("tagSize"),
+            .fx = detectionInfo.getField<Double>("focalLengthX"),
+            .fy = detectionInfo.getField<Double>("focalLengthY"),
+            .cx = detectionInfo.getField<Double>("focalCenterX"),
+            .cy = detectionInfo.getField<Double>("focalCenterY"),
+        };
+
+        apriltag_pose_t pose;
+        double error = estimate_tag_pose(&info, &pose);
+
+        jobject position = nativeMatToJava(env, pose.t);
+        jobject orientation = nativeMatToJava(env, pose.R);
+
+        using namespace jnikit::types;
+        return env.getClass<JTagPose>().newInstance<JFlatMatrix, JFlatMatrix, Double>(orientation, position, error);
+    });
+}
