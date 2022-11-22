@@ -1,0 +1,13 @@
+package com.flash3388.apriltags4j;
+
+public enum FamilyType {
+    TAG36H11,
+    TAG25H9,
+    TAG36H10,
+    TAG16H5,
+    TAGCIRCLE21H7,
+    TAGCIRCLE49H12,
+    TAGCUSTOM48H12,
+    TAGSTANDARD41H12,
+    TAGSTANDARD52H13
+}

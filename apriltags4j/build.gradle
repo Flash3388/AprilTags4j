@@ -5,15 +5,21 @@ plugins {
 
 version = VERSION
 group = GROUP
+
 sourceCompatibility = JavaVersion.VERSION_11
 targetCompatibility = JavaVersion.VERSION_11
 
 repositories {
-  mavenCentral()
+    mavenCentral()
+
+    maven {
+        url('https://frcmaven.wpi.edu/artifactory/release')
+    }
 }
 
 dependencies {
-
+    ext.YEAR = WPILIB_VERSION.split('\\.')[0]
+    implementation group: "edu.wpi.first.thirdparty.frc${YEAR}.opencv", name: 'opencv-java', version: "$OPENCV_VERSION"
 }
 
 jar {
@@ -29,6 +35,10 @@ jar {
     }
 }
 
+if (rootProject.hasProperty('crosscompile')) {
+    apply from: project.file('crosscompile.gradle')
+}
+
 def compileMachineTargets = [machines.host]
 compileMachineTargets.addAll(machines.customMachines)
 
@@ -42,6 +52,6 @@ cmake {
 }
 
 tasks.clean.dependsOn tasks.cmakeClean
-tasks.build.dependsOn tasks.cmakeBuild
+tasks.jar.dependsOn tasks.cmakeBuild
 
 apply from: project.file('publish.gradle')

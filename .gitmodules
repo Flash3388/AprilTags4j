@@ -1,0 +1,6 @@
+[submodule "cmake-toolchain-files"]
+	path = cmake-toolchain-files
+	url = https://github.com/tomtzook/cmake-toolchain-files.git
+[submodule "apriltags4j/src/main/jni/jnikit"]
+	path = apriltags4j/src/main/jni/jnikit
+	url = https://github.com/tomtzook/jnikit.git
