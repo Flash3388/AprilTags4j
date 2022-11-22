@@ -53,7 +53,7 @@ JNIEXPORT jobject JNICALL Java_com_flash3388_apriltags4j_AprilTagsDetectionsJNI_
         auto detectionCls = env.getClass<JDetection>();
         using namespace jnikit::types;
         return detectionCls.newInstance<Long, Int, Int, Float, Double, Double>(
-                reinterpret_cast<long>(detection),
+                reinterpret_cast<jlong>(detection),
                 detection->id,
                 detection->hamming,
                 detection->decision_margin,

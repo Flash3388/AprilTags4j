@@ -20,6 +20,6 @@ public class Detection {
     }
 
     public TagPose estimatePose(DetectionInfo info) {
-        AprilTagsDetectionsJNI.estimatePose(ptr, info);
+        return AprilTagsDetectionsJNI.estimatePose(ptr, info);
     }
 }

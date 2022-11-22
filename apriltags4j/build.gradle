@@ -5,6 +5,7 @@ plugins {
 
 version = VERSION
 group = GROUP
+
 sourceCompatibility = JavaVersion.VERSION_11
 targetCompatibility = JavaVersion.VERSION_11
 
@@ -34,7 +35,7 @@ jar {
     }
 }
 
-if (project.hasProperty('crosscompile')) {
+if (rootProject.hasProperty('crosscompile')) {
     apply from: project.file('crosscompile.gradle')
 }
 
