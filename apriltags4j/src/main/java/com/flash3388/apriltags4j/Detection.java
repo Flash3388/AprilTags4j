@@ -9,14 +9,18 @@ public class Detection {
     public final float decisionMargin;
     public final double centerX;
     public final double centerY;
+    public final double[][] corners;
 
-    public Detection(long ptr, int id, int hamming, float decisionMargin, double centerX, double centerY) {
+    public Detection(long ptr, int id, int hamming, float decisionMargin,
+                     double centerX, double centerY,
+                     double[][] corners) {
         this.ptr = ptr;
         this.id = id;
         this.hamming = hamming;
         this.decisionMargin = decisionMargin;
         this.centerX = centerX;
         this.centerY = centerY;
+        this.corners = corners;
     }
 
     public TagPose estimatePose(DetectionInfo info) {

@@ -21,7 +21,7 @@ static jobject nativeMatToJava(jnikit::Env& env, matd_t* mat) {
     static_assert(sizeof(double) == sizeof(jdouble));
 
     jsize length = mat->nrows * mat->ncols;
-    auto arr = env.newArray<DoubleArray>(length);
+    auto arr = env.newArray<Double>(length);
     arr.fill(mat->data, length);
 
     return env.getClass<JFlatMatrix>().newInstance<DoubleArray, Int, Int>(arr.array(), mat->nrows, mat->ncols);
@@ -50,15 +50,24 @@ JNIEXPORT jobject JNICALL Java_com_flash3388_apriltags4j_AprilTagsDetectionsJNI_
         apriltag_detection_t* detection;
         zarray_get(detections, static_cast<int>(index), &detection);
 
-        auto detectionCls = env.getClass<JDetection>();
         using namespace jnikit::types;
-        return detectionCls.newInstance<Long, Int, Int, Float, Double, Double>(
+
+        auto corners = env.newObjectArray<DoubleArray>(4);
+        for (int i = 0; i < corners.length(); i++) {
+            auto corner = env.newArray<Double>(2);
+            corner.fill(detection->p[i], 2);
+            corners.setElement(i, corner.array());
+        }
+
+        auto detectionCls = env.getClass<JDetection>();
+        return detectionCls.newInstance<Long, Int, Int, Float, Double, Double, ObjectArray<DoubleArray>>(
                 reinterpret_cast<jlong>(detection),
                 detection->id,
                 detection->hamming,
                 detection->decision_margin,
                 detection->c[0],
-                detection->c[1]
+                detection->c[1],
+                corners.array()
         );
     });
 }
