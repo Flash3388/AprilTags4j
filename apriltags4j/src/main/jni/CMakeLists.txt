@@ -14,6 +14,8 @@ set(apriltag_INCLUDE_DIRS "${apriltag_INCLUDE_DIRS}/apriltag")
 include_directories(${JNI_INCLUDE_DIRS} ${apriltag_INCLUDE_DIRS} ${OpenCV_INCLUDE_DIRS})
 link_directories(${apriltag_LIBDIR})
 
+set(CMAKE_POSITION_INDEPENDENT_CODE ON)
+
 add_library(apriltags_jni SHARED
         apriltag_detector.cpp
         apriltag_family.cpp except.h apriltag_detections.cpp)
