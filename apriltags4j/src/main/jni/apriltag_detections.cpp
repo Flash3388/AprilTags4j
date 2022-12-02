@@ -1,4 +1,5 @@
 #include <cerrno>
+#include <opencv2/opencv.hpp>
 #include <jni.h>
 #include <jnikit.h>
 
@@ -13,18 +14,15 @@ extern "C" {
 DEFINE_OBJECT_TYPE(JDetection, "com/flash3388/apriltags4j/Detection")
 DEFINE_OBJECT_TYPE(JDetectionInfo, "com/flash3388/apriltags4j/DetectionInfo")
 DEFINE_OBJECT_TYPE(JTagPose, "com/flash3388/apriltags4j/TagPose")
-DEFINE_OBJECT_TYPE(JFlatMatrix, "com/flash3388/apriltags4j/FlatMatrix")
+DEFINE_OBJECT_TYPE(JMat, "org/opencv/core/Mat")
 
 
 static jobject nativeMatToJava(jnikit::Env& env, matd_t* mat) {
     using namespace jnikit::types;
     static_assert(sizeof(double) == sizeof(jdouble));
 
-    jsize length = mat->nrows * mat->ncols;
-    auto arr = env.newArray<Double>(length);
-    arr.fill(mat->data, length);
-
-    return env.getClass<JFlatMatrix>().newInstance<DoubleArray, Int, Int>(arr.array(), mat->nrows, mat->ncols);
+    auto cvMat = new cv::Mat(mat->nrows, mat->ncols, CV_64F, mat->data);
+    return env.getClass<JMat>().newInstance<Long>(reinterpret_cast<jlong>(cvMat));
 }
 
 extern "C"
@@ -106,6 +104,6 @@ JNIEXPORT jobject JNICALL Java_com_flash3388_apriltags4j_AprilTagsDetectionsJNI_
         jobject orientation = nativeMatToJava(env, pose.R);
 
         using namespace jnikit::types;
-        return env.getClass<JTagPose>().newInstance<JFlatMatrix, JFlatMatrix, Double>(orientation, position, error);
+        return env.getClass<JTagPose>().newInstance<JMat, JMat, Double>(orientation, position, error);
     });
 }
