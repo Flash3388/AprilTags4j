@@ -1,0 +1,15 @@
+allprojects {
+    ext {
+        setPropertyGlobalFile = { key ->
+            if (rootProject.hasProperty(key)) {
+                def file = rootProject.file(rootProject.getProperty(key)).absolutePath
+                project.setProperty(key, file)
+            }
+        }
+    }
+
+    group = GROUP
+    version = VERSION
+
+    setPropertyGlobalFile('signing.secretKeyRingFile')
+}
