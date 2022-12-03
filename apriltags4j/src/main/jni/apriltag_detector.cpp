@@ -106,6 +106,7 @@ JNIEXPORT void JNICALL Java_com_flash3388_apriltags4j_AprilTagsDetectorJNI_addFa
         auto detector = reinterpret_cast<apriltag_detector*>(ptr);
         auto family = reinterpret_cast<apriltag_family*>(familyPtr);
 
+        errno = 0;
         apriltag_detector_add_family(detector, family);
         if (errno != 0) {
             env.throwException<JNIException, jnikit::types::Int>(errno);
@@ -120,6 +121,7 @@ JNIEXPORT void JNICALL Java_com_flash3388_apriltags4j_AprilTagsDetectorJNI_remov
         auto detector = reinterpret_cast<apriltag_detector*>(ptr);
         auto family = reinterpret_cast<apriltag_family*>(familyPtr);
 
+        errno = 0;
         apriltag_detector_remove_family(detector, family);
         if (errno != 0) {
             env.throwException<JNIException, jnikit::types::Int>(errno);
@@ -133,6 +135,7 @@ JNIEXPORT void JNICALL Java_com_flash3388_apriltags4j_AprilTagsDetectorJNI_clear
     jnikit::context<void>(env, [ptr](jnikit::Env& env)->void {
         auto detector = reinterpret_cast<apriltag_detector*>(ptr);
 
+        errno = 0;
         apriltag_detector_clear_families(detector);
         if (errno != 0) {
             env.throwException<JNIException, jnikit::types::Int>(errno);
