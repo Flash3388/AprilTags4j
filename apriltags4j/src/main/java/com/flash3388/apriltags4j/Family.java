@@ -14,6 +14,10 @@ public class Family implements AutoCloseable {
         return ptr;
     }
 
+    FamilyType type() {
+        return type;
+    }
+
     @Override
     public void close() throws Exception {
         AprilTagsFamilyJNI.destroy(type, ptr);

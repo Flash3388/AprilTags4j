@@ -58,14 +58,15 @@ JNIEXPORT jobject JNICALL Java_com_flash3388_apriltags4j_AprilTagsDetectionsJNI_
         }
 
         auto detectionCls = env.getClass<JDetection>();
-        return detectionCls.newInstance<Long, Int, Int, Float, Double, Double, ObjectArray<DoubleArray>>(
+        return detectionCls.newInstance<Long, Int, Int, Float, Double, Double, ObjectArray<DoubleArray>, Long>(
                 reinterpret_cast<jlong>(detection),
                 detection->id,
                 detection->hamming,
                 detection->decision_margin,
                 detection->c[0],
                 detection->c[1],
-                corners.array()
+                corners.array(),
+                reinterpret_cast<jlong>(detection->family)
         );
     });
 }
