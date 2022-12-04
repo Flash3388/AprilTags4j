@@ -4,11 +4,39 @@ public class Detection {
 
     private final long ptr;
 
+    /**
+     * The decoded ID of the tag
+     */
     public final int id;
+    /**
+     * How many error bits were corrected? Note: accepting large numbers of
+     * corrected errors leads to greatly increased false positive rates.
+     * NOTE: As of this implementation, the detector cannot detect tags with
+     * a hamming distance greater than 2.
+     */
     public final int hamming;
+    /**
+     * A measure of the quality of the binary decoding process: the
+     * average difference between the intensity of a data bit versus
+     * the decision threshold. Higher numbers roughly indicate better
+     * decodes. This is a reasonable measure of detection accuracy
+     * only for very small tags-- not effective for larger tags (where
+     * we could have sampled anywhere within a bit cell and still
+     * gotten a good detection.)
+     */
     public final float decisionMargin;
+    /**
+     * X Coordinate of the center of the detection in image pixel coordinates.
+     */
     public final double centerX;
+    /**
+     * Y Coordinate of the center of the detection in image pixel coordinates.
+     */
     public final double centerY;
+    /**
+     * The corners of the tag in image pixel coordinates. These always
+     * wrap counter-clock wise around the tag.
+     */
     public final double[][] corners;
 
     final long familyPtr;

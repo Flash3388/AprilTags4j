@@ -91,7 +91,7 @@ JNIEXPORT jobject JNICALL Java_com_flash3388_apriltags4j_AprilTagsDetectionsJNI_
 
         apriltag_detection_info_t info {
             .det = detection,
-            .tagsize = detectionInfo.getField<Double>("tagSize"),
+            .tagsize = detectionInfo.getField<Double>("tagSizeMeters"),
             .fx = detectionInfo.getField<Double>("focalLengthX"),
             .fy = detectionInfo.getField<Double>("focalLengthY"),
             .cx = detectionInfo.getField<Double>("focalCenterX"),
